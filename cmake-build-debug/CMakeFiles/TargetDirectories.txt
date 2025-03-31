@@ -1,0 +1,3 @@
+C:/Users/kurtubi/Documents/GitHub/TO-DOList/cmake-build-debug/CMakeFiles/TO_DOList.dir
+C:/Users/kurtubi/Documents/GitHub/TO-DOList/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/kurtubi/Documents/GitHub/TO-DOList/cmake-build-debug/CMakeFiles/rebuild_cache.dir
