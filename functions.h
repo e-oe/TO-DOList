@@ -5,7 +5,7 @@
 typedef struct task { //Görevleri, dinamik olarak hafızadan yer alacak şekilde bir char dizisine kaydedecek düğüm yapısı.
     struct task* next;
     struct task* previous;
-    char task [];
+    char* task ;
 }Task;
 typedef Task* taskPtr;
 
@@ -15,6 +15,11 @@ typedef struct list { //Oluşturulan düğümlerin başını,sonunu ve toplam d�
     int listSize;
 }List;
 typedef List* listPtr;
+
+//fonksiyon bildirimleri
+
+taskPtr CreateTask(char task[]);//Görev oluşturur
+listPtr CreateList();//Görev listesi oluşturur
 
 
 #endif //FUNCTIONS_H
