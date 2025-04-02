@@ -18,8 +18,12 @@ typedef List* listPtr;
 
 //fonksiyon bildirimleri
 
-taskPtr CreateTask(char task[]);//Görev oluşturur
+void AddTask(char task[],listPtr list);//Görev ddüğümümnü oluşturup listenin sonuna ekler
 listPtr CreateList();//Görev listesi oluşturur
+void DisplayList(listPtr List);//Listedeki görevleri gösteren fonksiyon
+taskPtr FindTask(char task[],listPtr list);//Listede görev arayıp bulunan nodu dönen fonksiyon
+void DeleteTask(taskPtr node,listPtr list);// Verilen listeden verilen taski silen fonksiyon
+
 
 
 #endif //FUNCTIONS_H

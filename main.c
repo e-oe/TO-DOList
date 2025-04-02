@@ -4,10 +4,30 @@
 
 
 int main(void) {
-    printf("Hello, World!\n");
-    char task[]="first taskolkjuhiyhgbhgvytffgfcgfctructdrturdcdtfgfc";
-    taskPtr gorev=CreateTask(task);
-    printf(gorev->task);
+    printf("write a task to add the list\n");
+    char task1[]="tak1";
+    char task2[]="tak2";
+    char task3[]="tak3";
+    char task4[]="tak4";
+    listPtr List=CreateList();
+
+
+    AddTask(task4,List);
+    AddTask(task4,List);
+
+
+    DisplayList(List);
+    taskPtr bulunan=FindTask(task4,List);
+    DeleteTask(bulunan,List);
+    printf("silindikten sonra\n");
+    int x=List->listSize;
+    printf("%d",x);
+
+    DisplayList(List);
+
+
+
+
 
     return 0;
 }
