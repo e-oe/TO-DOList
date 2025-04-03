@@ -14,16 +14,14 @@ int main(void) {
 
     AddTask(task4,List);
     AddTask(task4,List);
-
-
     DisplayList(List);
-    taskPtr bulunan=FindTask(task4,List);
-    DeleteTask(bulunan,List);
-    printf("silindikten sonra\n");
-    int x=List->listSize;
-    printf("%d",x);
-
+    FreeList(List);
     DisplayList(List);
+
+
+
+
+
 
 
 
