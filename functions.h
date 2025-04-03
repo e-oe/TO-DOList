@@ -19,13 +19,14 @@ typedef List* listPtr;
 //fonksiyon bildirimleri
 
 void AddTask(char task[],listPtr list);//Görev düğümümünü oluşturup listenin sonuna ekler
+void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int beforeOrAfter);//Tercihe göre bir görevi istenen herhangi bir görevden önce veya sonra oluşturur. Int olarak 1 gönderirse komşu taskın önüne 0 gönderilirse arakasına yerleşir.
 listPtr CreateList();//Görev listesi oluşturur
-void DisplayList(listPtr List);//Listedeki görevleri gösteren fonksiyon
+void DisplayList(listPtr list);//Listedeki görevleri gösteren fonksiyon
 taskPtr FindTask(char task[],listPtr list);//Listede görev arayıp bulunan nodu dönen fonksiyon
 void DeleteTask(taskPtr node,listPtr list);// Verilen listeden verilen taski silen fonksiyon
-void ClearList(listPtr List);//Verilen listedeki tüm verileri silip freeler
-void FreeList(listPtr List);// Listeyi önce silip ardından listeyi freeler
-
+void ClearList(listPtr list);//Verilen listedeki tüm verileri silip freeler
+void FreeList(listPtr list);// Listeyi önce silip ardından listeyi freeler
+void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr newNeighbouringTask,listPtr DestinationList,int beforeOrAfter);//Tercihe göre bir görevi istenen herhangi bir görevden sonraya veya önceye taşır.
 
 
 #endif //FUNCTIONS_H

@@ -12,11 +12,17 @@ int main(void) {
     listPtr List=CreateList();
 
 
-    AddTask(task4,List);
+    AddTask(task3,List);
+    AddTask(task1,List);
+    AddTask(task2,List);
     AddTask(task4,List);
     DisplayList(List);
-    FreeList(List);
+    printf("after the operation\n");
+    ChangeTaskPriority(List->tail,List,List->head,List,0);
     DisplayList(List);
+
+
+
 
 
 

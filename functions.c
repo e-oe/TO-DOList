@@ -29,9 +29,59 @@ void AddTask(char task[],listPtr list) {
         list->listSize++;
     }
 }// Görev düğümünü listenin sonuna ekleyen fonksiyon
-void AddBeforeAfterTask(char task[],listPtr List,taskPtr neighbouringTask,int beforeOrAfter) {
-    
-}//Tercihe göre bir görevi istenen herhangi bir görevden önce veya sonra oluşturur.
+
+void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int beforeOrAfter) {
+    if (neighbouringTask==NULL) {
+        printf("Geçersiz Yerleştırme");
+        exit(-1);
+    }
+    taskPtr node=(taskPtr)malloc(sizeof(Task));
+    if (node==NULL) {//Allocation kontrolü
+        printf("Memory Allocation Failed");
+        exit(-1);
+    }
+    node->task=strdup(task);
+    list->listSize++;
+    if (list->listSize==1) {
+        node->previous=NULL;
+        node->next=NULL;
+        list->head=node;
+        list->tail=node;
+        return;
+    }
+    if (beforeOrAfter) {//beforeOrAfter değişkenine 1 verildiğinde neighbouring task ten once yerlestir
+        if (list->head==neighbouringTask) {
+            list->head=node;
+            node->next=neighbouringTask;
+            node->previous=NULL;
+            neighbouringTask->previous=node;
+            return;
+        }
+        else {
+            node->previous=neighbouringTask->previous;
+            neighbouringTask->previous->next=node;
+            node->next=neighbouringTask;
+            neighbouringTask->previous=node;
+            return;
+        }
+    }
+    else {//beforeOrAfter değişkenine 0 verildiğinde neighbouring task dan sonra yerlestir
+        if (list->tail==neighbouringTask) {
+            list->tail=node;
+            node->previous=neighbouringTask;
+            neighbouringTask->next=node;
+            node->next=NULL;
+            return;
+        }
+        else {
+            node->next=neighbouringTask->next;
+            neighbouringTask->next->previous=node;
+            node->previous=neighbouringTask;
+            neighbouringTask->next=node;
+            return;
+        }
+    }
+}//Tercihe göre bir görevi istenen herhangi bir görevden önce veya sonra oluşturur. Int olarak 1 gönderirse komşu taskın önüne 0 gönderilirse arakasına yerleşir.
 
 listPtr CreateList() {
     listPtr taskList=(listPtr)malloc(sizeof(List));
@@ -46,17 +96,17 @@ listPtr CreateList() {
     return taskList;
 }//Liste oluşturup dönen fonksiyon.
 
-void DisplayList(listPtr List) {
-    if (List->listSize==0) {
+void DisplayList(listPtr list) {
+    if (list->listSize==0) {
         printf("Listeniz boş");
         return;
     }
-    if (List->tail->next!=NULL) {
+    if (list->tail->next!=NULL) {
         printf("Listeniz Silinmiş");
         return;
     }
 
-    taskPtr temp=List->head;
+    taskPtr temp=list->head;
     while (temp!=NULL) {
         printf(temp->task);
         printf("\n");
@@ -99,6 +149,7 @@ void DeleteTask(taskPtr node,listPtr list) {
     if (list->listSize>1&&node==list->head) {
         list->head=node->next;
         list->head->previous=NULL;
+        free(node->task);
         free(node);
         list->listSize--;
         return;
@@ -106,6 +157,7 @@ void DeleteTask(taskPtr node,listPtr list) {
     if (list->listSize>1&&node==list->tail) {
         list->tail=node->previous;
         node->previous->next=NULL;
+        free(node->task);
         free(node);
         list->listSize--;
         return;
@@ -113,32 +165,42 @@ void DeleteTask(taskPtr node,listPtr list) {
     else {
         node->previous->next=node->next;
         node->next->previous=node->previous;
+        free(node->task);
         free(node);
         list->listSize--;
     }
 }// Verilen listeden taski silen fonksiyon
 
-void ClearList(listPtr List) {
-    taskPtr temp=List->head;
-    while (List->head!=NULL) {
-        List->head=List->head->next;
+void ClearList(listPtr list) {
+    taskPtr temp=list->head;
+    while (list->head!=NULL) {
+        list->head=list->head->next;
+        free(temp->task);
         free(temp);
-        temp=List->head;
+        temp=list->head;
     }
-    List->tail=NULL;
-    List->listSize=0;
+    list->tail=NULL;
+    list->listSize=0;
 }//Verilen listedeki tüm verileri silip freeler
 
-void FreeList(listPtr List) {
-        ClearList(List);
-        free(List);
+void FreeList(listPtr list) {
+        ClearList(list);
+        free(list);
 }// Listeyi önce silip ardından listeyi freeler
 
-void ChangeTaskPriority(taskPtr taskToMove,listPtr ListTheTaskIsFrom,taskPtr newNeighbouringTask,listPtr DestinationList,int beforeOrAfter) {
-    taskPtr temp=taskToMove;
-    DeleteTask(taskToMove,ListTheTaskIsFrom);
-
-
+void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr newNeighbouringTask,listPtr DestinationList,int beforeOrAfter) {
+    if (taskToMove==newNeighbouringTask) {
+        printf("Geçersiz Yer Değiştirme");
+        return;
+    }
+    char* temp=strdup(taskToMove->task);
+    DeleteTask(taskToMove,listTheTaskIsFrom);
+    if (newNeighbouringTask==NULL) {
+        printf("Geçersiz Yer Değiştirme");
+        return;
+    }
+    AddBeforeAfterTask(temp,DestinationList,newNeighbouringTask,beforeOrAfter);
+    free(temp);
 }//Tercihe göre bir görevi istenen herhangi bir görevden sonraya veya önceye taşır.
 
 void SaveListsToFiles();
