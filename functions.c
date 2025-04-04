@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <errno.h>
 
 void AddTask(char task[],listPtr list) {
     taskPtr node=(taskPtr)malloc(sizeof(Task));
@@ -89,9 +91,21 @@ listPtr CreateList() {
       printf("Memory Allocation Failed");
         return NULL ;
     }
+    int counter=0;
+    FILE *listCounter=fopen("listcounter.txt","r");
+    if (listCounter) {
+        fscanf(listCounter,"%d",&counter);
+        fclose(listCounter);
+    }
     taskList->head=NULL;
     taskList->tail=NULL;
     taskList->listSize=0;
+    taskList->listNumber=counter;
+    listCounter=fopen("listcounter.txt","w");
+    if (listCounter) {
+        fprintf(listCounter,"%d",counter+1);
+        fclose(listCounter);
+    }
 
     return taskList;
 }//Liste oluşturup dönen fonksiyon.
@@ -203,7 +217,23 @@ void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr new
     free(temp);
 }//Tercihe göre bir görevi istenen herhangi bir görevden sonraya veya önceye taşır.
 
-void SaveListsToFiles();
+void SaveListToFile(listPtr list) {
+    char fullPath[100];
+    snprintf(fullPath,sizeof(fullPath),"savedlists/tasks_%d.txt",list->listNumber);
+    FILE *file=fopen(fullPath,"w");
+    if (file==NULL) {
+        perror("Dosyayı yazma modunda açarken bir hata oluştu");
+        return;
+    }
+    taskPtr temp=list->head;
+
+    while (temp!=NULL) {
+        fprintf(file,"%s\n",temp->task);
+        temp=temp->next;
+    }
+    fclose(file);
+    printf("Liste %s dosyasına kaydedildı\n",fullPath);
+}//Listeyi dosyaya kaydeden fonksiyon
 
 
 

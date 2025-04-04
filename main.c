@@ -10,16 +10,18 @@ int main(void) {
     char task3[]="tak3";
     char task4[]="tak4";
     listPtr List=CreateList();
+    listPtr Liste=CreateList();
 
 
-    AddTask(task3,List);
     AddTask(task1,List);
     AddTask(task2,List);
     AddTask(task4,List);
     DisplayList(List);
     printf("after the operation\n");
-    ChangeTaskPriority(List->tail,List,List->head,List,0);
+    AddTask(task4,List);
     DisplayList(List);
+
+    SaveListToFile(List);
 
 
 
