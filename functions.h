@@ -13,7 +13,7 @@ typedef struct list { //Oluşturulan düğümlerin başını,sonunu ve toplam d�
     taskPtr head;
     taskPtr tail;
     int listSize;
-    int listNumber;
+    int iD;
 }List;
 typedef List* listPtr;
 
@@ -33,13 +33,15 @@ void DeleteTask(taskPtr node,listPtr list);// Verilen listeden verilen taski sil
 
 void ClearList(listPtr list);//Verilen listedeki tüm verileri silip freeler
 
-void FreeList(listPtr list);// Listeyi önce silip ardından listeyi freeler
+void DeleteList(listPtr list);// Listeyi önce silip ardından listeyi freeler
+
+void DeleteFile(int listnumber);// Liste numarası alarak listenın kayıt dosyasını siler.
 
 void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr newNeighbouringTask,listPtr DestinationList,int beforeOrAfter);//Tercihe göre bir görevi istenen herhangi bir görevden sonraya veya önceye taşır.
 
 void SaveListToFile(listPtr list);//Listeyi dosyaya kaydeden fonksiyon
 
-void GetListFromFile();
+listPtr ReadFromFileAndCreateList(int fileId);//Dosyadaki verıler ile bir liste olultrup döner.
 
 
 

@@ -11,28 +11,9 @@ int main(void) {
     char task4[]="tak4";
     listPtr List=CreateList();
     listPtr Liste=CreateList();
-
-
-    AddTask(task1,List);
-    AddTask(task2,List);
-    AddTask(task4,List);
-    DisplayList(List);
-    printf("after the operation\n");
-    AddTask(task4,List);
-    DisplayList(List);
-
-    SaveListToFile(List);
-
-
-
-
-
-
-
-
-
-
-
+    
+    Liste=ReadFromFileAndCreateList(50);
+    DisplayList(Liste);
 
 
     return 0;

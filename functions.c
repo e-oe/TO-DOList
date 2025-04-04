@@ -34,7 +34,7 @@ void AddTask(char task[],listPtr list) {
 
 void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int beforeOrAfter) {
     if (neighbouringTask==NULL) {
-        printf("Geçersiz Yerleştırme");
+        printf("Trying to access deleted data");
         exit(-1);
     }
     taskPtr node=(taskPtr)malloc(sizeof(Task));
@@ -100,7 +100,7 @@ listPtr CreateList() {
     taskList->head=NULL;
     taskList->tail=NULL;
     taskList->listSize=0;
-    taskList->listNumber=counter;
+    taskList->iD=counter;
     listCounter=fopen("listcounter.txt","w");
     if (listCounter) {
         fprintf(listCounter,"%d",counter+1);
@@ -112,11 +112,11 @@ listPtr CreateList() {
 
 void DisplayList(listPtr list) {
     if (list->listSize==0) {
-        printf("Listeniz boş");
+        printf("Your list is empty");
         return;
     }
     if (list->tail->next!=NULL) {
-        printf("Listeniz Silinmiş");
+        printf("Can not access your list is deleted.");
         return;
     }
 
@@ -130,8 +130,8 @@ void DisplayList(listPtr list) {
 
 taskPtr FindTask(char task[],listPtr list) {
     if (list->listSize==0) {
-        printf("Listeniz herhangi bir görev yok.");
-        exit(-1);
+        printf("Your list is empty.");
+        return NULL;
     }
     else {
         taskPtr temp=list->head;
@@ -143,7 +143,7 @@ taskPtr FindTask(char task[],listPtr list) {
                 temp=temp->next;
             }
         }
-        printf("Görev Bulunamadı");
+        printf("Could not find the task you are looking for.");
         return 0;
     }
 
@@ -151,7 +151,7 @@ taskPtr FindTask(char task[],listPtr list) {
 
 void DeleteTask(taskPtr node,listPtr list) {
     if (!FindTask(node->task,list)) {
-        printf("Silinecek Görev Bulunamadı");
+        printf("Could not find the task.");
     }
     if (list->listSize==1) {
         free(node);
@@ -197,20 +197,40 @@ void ClearList(listPtr list) {
     list->listSize=0;
 }//Verilen listedeki tüm verileri silip freeler
 
-void FreeList(listPtr list) {
+void DeleteList(listPtr list) {
+        int x= list->iD;
+        char fullPath[100];
+        snprintf(fullPath,sizeof(fullPath),"savedlists/tasks_%d.txt",x);
+        if (remove(fullPath)==0) {
+            printf("%s deleted successfully.",fullPath);
+        }
+        else {
+            perror("Error while deleting the file.");
+        }
         ClearList(list);
         free(list);
-}// Listeyi önce silip ardından listeyi freeler
+}// Listenin dosyasını, bilgilerini siler ve freeler.
+
+void DeleteFile(int listnumber) {
+    char fullPath[100];
+    snprintf(fullPath,sizeof(fullPath),"savedlists/tasks_%d.txt",listnumber);
+    if (remove(fullPath)==0) {
+        printf("%s deleted successfully.",fullPath);
+    }
+    else {
+        perror("Error while deleting the file.");
+    }
+}// Liste numarası alarak listenın kayıt dosyasını siler.
 
 void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr newNeighbouringTask,listPtr DestinationList,int beforeOrAfter) {
     if (taskToMove==newNeighbouringTask) {
-        printf("Geçersiz Yer Değiştirme");
+        printf("Invalid Action");
         return;
     }
     char* temp=strdup(taskToMove->task);
     DeleteTask(taskToMove,listTheTaskIsFrom);
     if (newNeighbouringTask==NULL) {
-        printf("Geçersiz Yer Değiştirme");
+        printf("Invalid Action");
         return;
     }
     AddBeforeAfterTask(temp,DestinationList,newNeighbouringTask,beforeOrAfter);
@@ -219,10 +239,10 @@ void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr new
 
 void SaveListToFile(listPtr list) {
     char fullPath[100];
-    snprintf(fullPath,sizeof(fullPath),"savedlists/tasks_%d.txt",list->listNumber);
+    snprintf(fullPath,sizeof(fullPath),"savedlists/tasks_%d.txt",list->iD);
     FILE *file=fopen(fullPath,"w");
     if (file==NULL) {
-        perror("Dosyayı yazma modunda açarken bir hata oluştu");
+        perror("Error while opening the file.");
         return;
     }
     taskPtr temp=list->head;
@@ -232,8 +252,32 @@ void SaveListToFile(listPtr list) {
         temp=temp->next;
     }
     fclose(file);
-    printf("Liste %s dosyasına kaydedildı\n",fullPath);
+    printf("List is saved in %s file.\n",fullPath);
 }//Listeyi dosyaya kaydeden fonksiyon
+
+listPtr ReadFromFileAndCreateList(int fileId) {
+    listPtr List=CreateList();
+    List->iD=fileId;
+    char fullPath[100];
+    char line[256];
+    snprintf(fullPath,sizeof(fullPath),"savedlists/tasks_%d.txt",fileId);
+    FILE *file=fopen(fullPath,"r");
+    if (file==NULL) {
+        perror("Error while opening the file.");
+        return NULL;
+    }
+    while (fgets(line, sizeof(line), file)) {
+        line[strcspn(line, "\n")] = 0;
+        AddTask(line,List);
+    }
+
+    fclose(file);
+    printf("List is successfully loaded from %d .\n", fileId);
+    return List;
+
+}//Dosyadan okuyup liste döner.
+
+
 
 
 
