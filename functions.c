@@ -85,6 +85,19 @@ void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int be
     }
 }//Tercihe göre bir görevi istenen herhangi bir görevden önce veya sonra oluşturur. Int olarak 1 gönderirse komşu taskın önüne 0 gönderilirse arakasına yerleşir.
 
+masterListPtr CreateMasterList() {
+    masterListPtr masterList=(masterListPtr)malloc(sizeof(MasterList));
+    if (masterList==NULL) {
+        printf("Memory Allocation Failed");
+        exit(-1);
+    }
+    masterList->next=NULL;
+    masterList->previous=NULL;
+    masterList->List=NULL;
+    masterList->howManyList=0;
+    return masterList;
+}//MasterList oluşturan fonksiyon.Her runtime başlangıcında çağrılırsa kaydedılecek olan lıstelerın hesabını tutmak kolaylasır.
+
 listPtr CreateList() {
     listPtr taskList=(listPtr)malloc(sizeof(List));
     if (taskList==NULL) {// Allocation kontrolü
@@ -276,6 +289,8 @@ listPtr ReadFromFileAndCreateList(int fileId) {
     return List;
 
 }//Dosyadan okuyup liste döner.
+
+
 
 
 
