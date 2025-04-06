@@ -51,12 +51,12 @@ void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr new
 
 void SaveListToFile(listPtr list);//Listeyi dosyaya kaydeden fonksiyon
 
-listPtr ReadFromFileAndCreateList(int fileId);//Dosyadaki verıler ile bir liste olultrup döner.
+listPtr ReadFromFileAndCreateList(int fileId);//Dosyadaki verıler ile bir liste olusturup döner.
 //This is the logic behind the masterList. You run masterlist creator as soon as program starts. After masterList is created you give it to some functions
-//as parameters conserning lists. And the function will call mainListAdder function to add list to mainlist. Talked about functions are:
+//as parameters concerning lists. And the function will call mainListAdder function to add list to mainlist. Talked about functions are:
 //AddTask,AddBeforeAfterTask,CreateList,DeleteTask,ClearList,DeleteList,DeleteFile,ChangeTaskPriority,ReadFromFileAndCreateList
-//Some functions I need to write conserning mainlist: FindInMainList,DeleteFromMainlist,AddToMainList
-//I need to do something to assure i save on the same file instead of creating new while reading from a file. I need make lists id the files id so it can save it on the same file.
+//Some functions I need to write concerning mainlist: FindInMainList,DeleteFromMainlist,AddToMainList
+
 
 
 #endif //FUNCTIONS_H

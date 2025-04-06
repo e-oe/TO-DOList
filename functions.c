@@ -271,6 +271,17 @@ void SaveListToFile(listPtr list) {
 listPtr ReadFromFileAndCreateList(int fileId) {
     listPtr List=CreateList();
     List->iD=fileId;
+    int counter=0;
+    FILE *listCounter=fopen("listcounter.txt","r");
+    if (listCounter) {
+        fscanf(listCounter,"%d",&counter);
+        fclose(listCounter);
+    }
+    listCounter=fopen("listcounter.txt","w");
+    if (listCounter) {
+        fprintf(listCounter,"%d",counter-1);
+        fclose(listCounter);
+    }
     char fullPath[100];
     char line[256];
     snprintf(fullPath,sizeof(fullPath),"savedlists/tasks_%d.txt",fileId);
