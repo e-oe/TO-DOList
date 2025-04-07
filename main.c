@@ -9,15 +9,13 @@ int main(void) {
     char task2[]="tak2";
     char task3[]="tak3";
     char task4[]="tak4";
-    listPtr Liste;
+
 
     
-    Liste=ReadFromFileAndCreateList(50);
-    AddTask("so",Liste);
-    AddTask("is",Liste);
-    AddTask("this even matter",Liste);
+    listPtr Liste=ReadFromFileAndCreateList(50);
+
     DisplayList(Liste);
-    SaveListToFile(Liste);
+
 
     return 0;
 }

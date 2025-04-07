@@ -55,6 +55,7 @@ void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int be
         if (list->head==neighbouringTask) {
             list->head=node;
             node->next=neighbouringTask;
+
             node->previous=NULL;
             neighbouringTask->previous=node;
             return;
@@ -296,7 +297,7 @@ listPtr ReadFromFileAndCreateList(int fileId) {
     }
 
     fclose(file);
-    printf("List is successfully loaded from %d .\n", fileId);
+    printf("List is successfully loaded from log %d.\n", fileId);
     return List;
 
 }//Dosyadan okuyup liste döner.

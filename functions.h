@@ -31,7 +31,7 @@ void AddTask(char task[],listPtr list);//Görev düğümümünü oluşturup list
 
 void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int beforeOrAfter);//Tercihe göre bir görevi istenen herhangi bir görevden önce veya sonra oluşturur. Int olarak 1 gönderirse komşu taskın önüne 0 gönderilirse arakasına yerleşir.
 
-masterListPtr CreateMasterList();//MasterLıst oluşturan fonksiyon.Her runtime başlangıcında çağrılırsa kaydedılecek olan lıstelerın hesabını tutmak kolaylasır.
+masterListPtr CreateMasterList();//MasterList oluşturan fonksiyon.Her runtime başlangıcında çağrılırsa kaydedılecek olan lıstelerın hesabını tutmak kolaylasır.
 
 listPtr CreateList();//Görev listesi oluşturur
 
@@ -53,9 +53,10 @@ void SaveListToFile(listPtr list);//Listeyi dosyaya kaydeden fonksiyon
 
 listPtr ReadFromFileAndCreateList(int fileId);//Dosyadaki verıler ile bir liste olusturup döner.
 //This is the logic behind the masterList. You run masterlist creator as soon as program starts. After masterList is created you give it to some functions
-//as parameters concerning lists. And the function will call mainListAdder function to add list to mainlist. Talked about functions are:
+//as parameters concerning lists. And the function will call mainListAdder function to add list to masterlist. Talked about functions are:
 //AddTask,AddBeforeAfterTask,CreateList,DeleteTask,ClearList,DeleteList,DeleteFile,ChangeTaskPriority,ReadFromFileAndCreateList
-//Some functions I need to write concerning mainlist: FindInMainList,DeleteFromMainlist,AddToMainList
+//Some functions I need to write concerning masterlist: FindInMasterList,DeleteFromMasterlist,AddToMasterList,SaveTheMasterList
+//There is a potential problem in addbeforeafter function i need to look it up
 
 
 
