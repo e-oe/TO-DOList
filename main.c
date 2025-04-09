@@ -13,8 +13,11 @@ int main(void) {
 
     
     listPtr Liste=ReadFromFileAndCreateList(50);
+    listPtr list1=CreateList();
 
     DisplayList(Liste);
+
+
 
 
     return 0;

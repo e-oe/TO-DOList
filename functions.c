@@ -30,7 +30,36 @@ void AddTask(char task[],listPtr list) {
         list->tail=node;
         list->listSize++;
     }
+    SaveListToMainList(list);
 }// Görev düğümünü listenin sonuna ekleyen fonksiyon
+
+
+void AddTaskWithoutMainList(char task[],listPtr list) {
+    taskPtr node=(taskPtr)malloc(sizeof(Task));
+    if (node==NULL) {//Allocation kontrolü
+        printf("Memory Allocation Failed");
+        exit(-1);
+    }
+    node->next=NULL;
+    node->previous=NULL;
+    node->task=strdup(task);
+    if (node->task==NULL) {//Strdup Allocation kontrolü
+        printf("TMemory Allocation Failed");
+        free(node);
+        exit(-1);
+    }
+    if (list->head==NULL) {
+        list->head=node;
+        list->tail=node;
+        list->listSize++;
+    }
+    else {
+        node->previous=list->tail;
+        list->tail->next=node;
+        list->tail=node;
+        list->listSize++;
+    }
+}// Görev düğümünü listenin sonuna ekler ancak liste bilgilerini masterlist dosyasina islemez.Bu durum fonksiyonun bir dongu icerisinde cagirilmasi durumunda gereksiz yere mainlistte log acmasini engeller.
 
 void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int beforeOrAfter) {
     if (neighbouringTask==NULL) {
@@ -84,20 +113,8 @@ void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int be
             return;
         }
     }
+    SaveListToMainList(list);
 }//Tercihe göre bir görevi istenen herhangi bir görevden önce veya sonra oluşturur. Int olarak 1 gönderirse komşu taskın önüne 0 gönderilirse arakasına yerleşir.
-
-masterListPtr CreateMasterList() {
-    masterListPtr masterList=(masterListPtr)malloc(sizeof(MasterList));
-    if (masterList==NULL) {
-        printf("Memory Allocation Failed");
-        exit(-1);
-    }
-    masterList->next=NULL;
-    masterList->previous=NULL;
-    masterList->List=NULL;
-    masterList->howManyList=0;
-    return masterList;
-}//MasterList oluşturan fonksiyon.Her runtime başlangıcında çağrılırsa kaydedılecek olan lıstelerın hesabını tutmak kolaylasır.
 
 listPtr CreateList() {
     listPtr taskList=(listPtr)malloc(sizeof(List));
@@ -106,7 +123,7 @@ listPtr CreateList() {
         return NULL ;
     }
     int counter=0;
-    FILE *listCounter=fopen("listcounter.txt","r");
+    FILE *listCounter=fopen("listcounter/listcounter.txt","r");
     if (listCounter) {
         fscanf(listCounter,"%d",&counter);
         fclose(listCounter);
@@ -115,11 +132,12 @@ listPtr CreateList() {
     taskList->tail=NULL;
     taskList->listSize=0;
     taskList->iD=counter;
-    listCounter=fopen("listcounter.txt","w");
+    listCounter=fopen("listcounter/listcounter.txt","w");
     if (listCounter) {
         fprintf(listCounter,"%d",counter+1);
         fclose(listCounter);
     }
+    SaveListToMainList(taskList);
 
     return taskList;
 }//Liste oluşturup dönen fonksiyon.
@@ -197,6 +215,7 @@ void DeleteTask(taskPtr node,listPtr list) {
         free(node);
         list->listSize--;
     }
+    SaveListToMainList(list);
 }// Verilen listeden taski silen fonksiyon
 
 void ClearList(listPtr list) {
@@ -209,9 +228,11 @@ void ClearList(listPtr list) {
     }
     list->tail=NULL;
     list->listSize=0;
+    SaveListToMainList(list);
 }//Verilen listedeki tüm verileri silip freeler
 
 void DeleteList(listPtr list) {
+
         int x= list->iD;
         char fullPath[100];
         snprintf(fullPath,sizeof(fullPath),"savedlists/tasks_%d.txt",x);
@@ -248,6 +269,8 @@ void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr new
         return;
     }
     AddBeforeAfterTask(temp,DestinationList,newNeighbouringTask,beforeOrAfter);
+    SaveListToMainList(listTheTaskIsFrom);
+    SaveListToMainList(DestinationList);
     free(temp);
 }//Tercihe göre bir görevi istenen herhangi bir görevden sonraya veya önceye taşır.
 
@@ -269,16 +292,37 @@ void SaveListToFile(listPtr list) {
     printf("List is saved in %s file.\n",fullPath);
 }//Listeyi dosyaya kaydeden fonksiyon
 
+void SaveListToMainList(listPtr list) {
+    char fullPath[100];
+    snprintf(fullPath,sizeof(fullPath),"mainlist/mainlist.txt");
+    FILE *file=fopen(fullPath,"a");
+    if (file==NULL) {
+        perror("Error while opening the file.");
+        return;
+    }
+    fprintf(file,"%p\n",list);
+    fclose(file);
+    printf("List is saved in %s file.\n",fullPath);
+}//Listeyi mainliste kaydeden fonksiyon
+
+void SaveTheChangesInMainList(){}//Mainliste kaydedilmis(yani uzerinde degisiklik yapilmis) listeleri dosyaya kaydeder.
+
+void FindAndRevertChanges(){}//Verilen listenin mainlistteki logunu silerek son sessionda yapilmis degisikliklerin kaydedilmemesini saglar.
+
+void FlushMainList(){}//Programin runtime i sona erdiginde cagrilarak mainlist logunu temizler.
+
+void ClearAllLogs(){}//Programin tuttugu tum loglari temizler tum kaitlari 0 lar.
+
 listPtr ReadFromFileAndCreateList(int fileId) {
     listPtr List=CreateList();
     List->iD=fileId;
     int counter=0;
-    FILE *listCounter=fopen("listcounter.txt","r");
+    FILE *listCounter=fopen("listcounter/listcounter.txt","r");
     if (listCounter) {
         fscanf(listCounter,"%d",&counter);
         fclose(listCounter);
     }
-    listCounter=fopen("listcounter.txt","w");
+    listCounter=fopen("listcounter/listcounter.txt","w");
     if (listCounter) {
         fprintf(listCounter,"%d",counter-1);
         fclose(listCounter);
@@ -293,11 +337,12 @@ listPtr ReadFromFileAndCreateList(int fileId) {
     }
     while (fgets(line, sizeof(line), file)) {
         line[strcspn(line, "\n")] = 0;
-        AddTask(line,List);
+        AddTaskWithoutMainList(line,List);
     }
 
     fclose(file);
     printf("List is successfully loaded from log %d.\n", fileId);
+
     return List;
 
 }//Dosyadan okuyup liste döner.
