@@ -17,11 +17,15 @@ typedef struct list { //Oluşturulan düğümlerin başını,sonunu ve toplam d�
 }List;
 typedef List* listPtr;
 
-//fonksiyon bildirimleri
+
+/* MainList çalışma mantığı: Açılan bir sessionda üzerinde değişiklik yapılan ve yeni oluşturulan listelerin adreslerini yerel bir dosyaya kaydeder.
+ Gerekli fonksiyonlarla , yapılan değişiklikler yerel dosyalara kaydedilebilir veya son sessionda yapılmış ve kaydeilmemiş değişiklikler geri çevrilebilir.*/
+
+//Fonksiyon bildirimleri:
 
 void AddTask(char task[],listPtr list);//Görev düğümümünü oluşturup listenin sonuna ekler.
 
-void AddTaskWithoutMainList(char task[],listPtr list);// Görev düğümünü listenin sonuna ekler ancak liste bilgilerini masterlist dosyasina islemez.Bu durum fonksiyonun bir dongu icerisinde cagirilmasi durumunda gereksiz yere mainlistte log acmasini engeller.
+void AddTaskWithoutMainList(char task[],listPtr list);// Görev düğümünü listenin sonuna ekler ancak liste bilgilerini mainlist dosyasina islemez.Bu durum fonksiyonun bir dongu icerisinde cagirilmasi durumunda gereksiz yere mainlistte log acmasini engeller.
 
 void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int beforeOrAfter);//Tercihe göre bir görevi istenen herhangi bir görevden önce veya sonra oluşturur. Int olarak 1 gönderirse komşu taskın önüne 0 gönderilirse arakasına yerleşir.
 

@@ -11,11 +11,29 @@ int main(void) {
     char task4[]="tak4";
 
 
-    
-    listPtr Liste=ReadFromFileAndCreateList(50);
-    listPtr list1=CreateList();
 
-    DisplayList(Liste);
+    listPtr Listem=CreateList();
+    AddTask(task1,Listem);
+    AddTask(task2,Listem);
+    AddTask(task3,Listem);
+    AddTask(task4,Listem);
+    AddTask(task3,Listem);
+    AddTask(task3,Listem);
+    DisplayList(Listem);
+    DeleteTask(FindTask(task4,Listem),Listem);
+    printf("after======\n");
+    DisplayList(Listem);
+    printf("%p",Listem);
+    SaveTheChangesInMainList();
+
+
+    
+    // listPtr Liste=ReadFromFileAndCreateList(50);
+    // DisplayList(Liste);
+    // DeleteTask(task1,Liste);
+    // DisplayList(Liste);
+    // SaveListToFile(Liste);
+
 
 
 

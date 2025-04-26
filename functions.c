@@ -5,6 +5,11 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+
+
+/* MainList çalışma mantığı: Açılan bir sessionda üzerinde değişiklik yapılan ve yeni oluşturulan listelerin adreslerini yerel bir dosyaya kaydeder.
+ Gerekli fonksiyonlarla , yapılan değişiklikler yerel dosyalara kaydedilebilir veya son sessionda yapılmış ve kaydeilmemiş değişiklikler geri çevrilebilir.*/
+
 void AddTask(char task[],listPtr list) {
     taskPtr node=(taskPtr)malloc(sizeof(Task));
     if (node==NULL) {//Allocation kontrolü
@@ -33,7 +38,6 @@ void AddTask(char task[],listPtr list) {
     SaveListToMainList(list);
 }// Görev düğümünü listenin sonuna ekleyen fonksiyon
 
-
 void AddTaskWithoutMainList(char task[],listPtr list) {
     taskPtr node=(taskPtr)malloc(sizeof(Task));
     if (node==NULL) {//Allocation kontrolü
@@ -59,13 +63,14 @@ void AddTaskWithoutMainList(char task[],listPtr list) {
         list->tail=node;
         list->listSize++;
     }
-}// Görev düğümünü listenin sonuna ekler ancak liste bilgilerini masterlist dosyasina islemez.Bu durum fonksiyonun bir dongu icerisinde cagirilmasi durumunda gereksiz yere mainlistte log acmasini engeller.
+}// Görev düğümünü listenin sonuna ekler ancak liste bilgilerini masterlist dosyasina işlemez.Bu durum fonksiyonun bir döngü icerisinde cagirilmasi durumunda gereksiz yere mainlistte log acmasini engeller.
 
 void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int beforeOrAfter) {
     if (neighbouringTask==NULL) {
         printf("Trying to access deleted data");
         exit(-1);
     }
+    SaveListToMainList(list);
     taskPtr node=(taskPtr)malloc(sizeof(Task));
     if (node==NULL) {//Allocation kontrolü
         printf("Memory Allocation Failed");
@@ -113,7 +118,7 @@ void AddBeforeAfterTask(char task[],listPtr list,taskPtr neighbouringTask,int be
             return;
         }
     }
-    SaveListToMainList(list);
+
 }//Tercihe göre bir görevi istenen herhangi bir görevden önce veya sonra oluşturur. Int olarak 1 gönderirse komşu taskın önüne 0 gönderilirse arakasına yerleşir.
 
 listPtr CreateList() {
@@ -175,7 +180,7 @@ taskPtr FindTask(char task[],listPtr list) {
                 temp=temp->next;
             }
         }
-        printf("Could not find the task you are looking for.");
+        printf("Could not find the task you are looking for.\n");
         return 0;
     }
 
@@ -183,7 +188,7 @@ taskPtr FindTask(char task[],listPtr list) {
 
 void DeleteTask(taskPtr node,listPtr list) {
     if (!FindTask(node->task,list)) {
-        printf("Could not find the task.");
+        printf("Could not find the task.\n");
     }
     if (list->listSize==1) {
         free(node);
@@ -305,13 +310,40 @@ void SaveListToMainList(listPtr list) {
     printf("List is saved in %s file.\n",fullPath);
 }//Listeyi mainliste kaydeden fonksiyon
 
-void SaveTheChangesInMainList(){}//Mainliste kaydedilmis(yani uzerinde degisiklik yapilmis) listeleri dosyaya kaydeder.
+void SaveTheChangesInMainList() {
+    char line[256];
+    char fullPath[100];
+    snprintf(fullPath,sizeof(fullPath),"mainlist/mainlist.txt");
+    FILE *file=fopen(fullPath,"r");
+    if (file==NULL) {
+        perror("Error while opening the file.");
+        return;
+    }
+
+    while (fgets(line, sizeof(line), file)) {
+        size_t len=strlen(line);
+        if (len > 0 && line[len - 1] == '\n') {
+            line[len - 1] = '\0';
+        }
+        unsigned long long uladres = strtoull(line, NULL, 16);
+        listPtr list = (listPtr)uladres;
+        SaveListToFile(list);
+    }
+    fclose(file);
+    FlushMainList();
+
+}//Mainliste kaydedilmis(yani uzerinde değişiklik yapilmis) listeleri dosyaya kaydeder.
 
 void FindAndRevertChanges(){}//Verilen listenin mainlistteki logunu silerek son sessionda yapilmis degisikliklerin kaydedilmemesini saglar.
 
-void FlushMainList(){}//Programin runtime i sona erdiginde cagrilarak mainlist logunu temizler.
+void FlushMainList() {
+    char fullPath[100];
+    snprintf(fullPath,sizeof(fullPath),"mainlist/mainlist.txt");
+    FILE *file=fopen(fullPath,"w");
+    fclose(file);
+}//Programin runtime i sona erdiginde cagrilarak mainlist logunu temizler.Sessiondaki kaydedilmemiş tüm değişiklikleri geri alır.
 
-void ClearAllLogs(){}//Programin tuttugu tum loglari temizler tum kaitlari 0 lar.
+void ClearAllLogs(){}//Programin tuttugu tum mainlist loglarını temizler tum kaitlari degişiklik yapılmadan önceki haline getirir.
 
 listPtr ReadFromFileAndCreateList(int fileId) {
     listPtr List=CreateList();
@@ -345,8 +377,9 @@ listPtr ReadFromFileAndCreateList(int fileId) {
 
     return List;
 
-}//Dosyadan okuyup liste döner.
+}//Dosyadan veri okuyup liste döner.
 
+//Tekrarlı mainlist kaydı oluşturmamak adına SaveListToMainList fonksiyonuna bir kontrol aşaması eklenebilir.
 
 
 
