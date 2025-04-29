@@ -299,15 +299,30 @@ void SaveListToFile(listPtr list) {
 
 void SaveListToMainList(listPtr list) {
     char fullPath[100];
+    char line[256];
     snprintf(fullPath,sizeof(fullPath),"mainlist/mainlist.txt");
-    FILE *file=fopen(fullPath,"a");
+    FILE *file=fopen(fullPath,"r");
+    while (fgets(line, sizeof(line), file)) {
+        char lineTemp[256];
+        strcpy(lineTemp,line);
+        size_t len=strlen(line);
+        if (len > 0 && line[len - 1] == '\n') {
+            line[len - 1] = '\0';
+        }
+        unsigned long long ulladres = strtoull(line, NULL, 16);
+
+        if (list == (listPtr)ulladres) {
+            return;
+        }
+    }
+    fclose(file);
+    file=fopen(fullPath,"a");
     if (file==NULL) {
         perror("Error while opening the file.");
         return;
     }
     fprintf(file,"%p\n",list);
     fclose(file);
-    printf("List is saved in %s file.\n",fullPath);
 }//Listeyi mainliste kaydeden fonksiyon
 
 void SaveTheChangesInMainList() {
@@ -325,8 +340,8 @@ void SaveTheChangesInMainList() {
         if (len > 0 && line[len - 1] == '\n') {
             line[len - 1] = '\0';
         }
-        unsigned long long uladres = strtoull(line, NULL, 16);
-        listPtr list = (listPtr)uladres;
+        unsigned long long ulladres = strtoull(line, NULL, 16);
+        listPtr list = (listPtr)ulladres;
         SaveListToFile(list);
     }
     fclose(file);
@@ -334,16 +349,22 @@ void SaveTheChangesInMainList() {
 
 }//Mainliste kaydedilmis(yani uzerinde değişiklik yapilmis) listeleri dosyaya kaydeder.
 
-void FindAndRevertChanges(){}//Verilen listenin mainlistteki logunu silerek son sessionda yapilmis degisikliklerin kaydedilmemesini saglar.
-
 void FlushMainList() {
     char fullPath[100];
     snprintf(fullPath,sizeof(fullPath),"mainlist/mainlist.txt");
     FILE *file=fopen(fullPath,"w");
     fclose(file);
-}//Programin runtime i sona erdiginde cagrilarak mainlist logunu temizler.Sessiondaki kaydedilmemiş tüm değişiklikleri geri alır.
+}//Sessiondaki kaydedilmemiş tüm değişiklikleri geri alır.
 
-void ClearAllLogs(){}//Programin tuttugu tum mainlist loglarını temizler tum kaitlari degişiklik yapılmadan önceki haline getirir.
+void ClearAllLogs() {
+    char fullPath[100];
+    snprintf(fullPath,sizeof(fullPath),"mainlist/mainlist.txt");
+    FILE *file=fopen(fullPath,"w");
+    fclose(file);
+    FILE *listCounter=fopen("listcounter/listcounter.txt","w");
+    fclose(listCounter);
+
+}//Programin tuttugu tum  loglarını temizler (listcounter ve mainlist).
 
 listPtr ReadFromFileAndCreateList(int fileId) {
     listPtr List=CreateList();
@@ -379,7 +400,16 @@ listPtr ReadFromFileAndCreateList(int fileId) {
 
 }//Dosyadan veri okuyup liste döner.
 
-//Tekrarlı mainlist kaydı oluşturmamak adına SaveListToMainList fonksiyonuna bir kontrol aşaması eklenebilir.
+
+
+
+
+/*The functions that i could add in feature
+void FindAndRevertChanges(listPtr list) {
+char address[100]=list;
+}//Verilen listenin mainlistteki logunu silerek son sessionda yapilmis degisikliklerin kaydedilmemesini saglar.
+*/
+
 
 
 

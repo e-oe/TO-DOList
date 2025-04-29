@@ -55,14 +55,14 @@ void FindAndRevertChanges();//Verilen listenin mainlistteki logunu silerek son s
 
 void FlushMainList();//Programin runtime i sona erdiginde cagrilarak mainlist logunu temizler.
 
-void ClearAllLogs();//Programin tuttugu tum loglari temizler tum kayitlari 0 lar.
+void ClearAllLogs();//Programin tuttugu tum  loglarını temizler (savedlists,listcounter ve mainlist).
 
-listPtr ReadFromFileAndCreateList(int fileId);//Dosyadaki verıler ile bir liste olusturup döner.
-
-
+listPtr ReadFromFileAndCreateList(int fileId);//Dosyadaki veriler ile bir liste olusturup döner.
 
 
-//There is a potential problem in addbeforeafter function i need to look it up
+
+
+
 
 
 

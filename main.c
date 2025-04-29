@@ -13,9 +13,13 @@ int main(void) {
 
 
     listPtr Listem=CreateList();
+    listPtr list=CreateList();
+    ReadFromFileAndCreateList(50);
     AddTask(task1,Listem);
     AddTask(task2,Listem);
+    AddTask(task1,list);
     AddTask(task3,Listem);
+    AddTask(task2,list);
     AddTask(task4,Listem);
     AddTask(task3,Listem);
     AddTask(task3,Listem);
@@ -23,8 +27,9 @@ int main(void) {
     DeleteTask(FindTask(task4,Listem),Listem);
     printf("after======\n");
     DisplayList(Listem);
-    printf("%p",Listem);
     SaveTheChangesInMainList();
+    FlushMainList();
+
 
 
     
