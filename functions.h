@@ -63,6 +63,11 @@ void SmartDeleteTask(const char* taskName, listPtr list);
 
 void UndoLastDeleted(listPtr list);
 
+void EnqueueTask(const char* task);
+
+void ProcessNextTask(listPtr list);
+
+void AutoQueueList(listPtr list);
 
 
 
