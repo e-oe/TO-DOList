@@ -400,6 +400,63 @@ listPtr ReadFromFileAndCreateList(int fileId) {
 
 }//Dosyadan veri okuyup liste döner.
 
+typedef struct stackNode {
+    char *task;
+    struct stackNode *next;
+} StackNode;
+
+typedef struct stack {
+    StackNode *top;
+} TaskStack;
+
+TaskStack undoStack = {NULL}; 
+
+void AddDeletedTaskToStack(const char* task) {
+    StackNode* newNode = (StackNode*)malloc(sizeof(StackNode));
+    if (!newNode) {
+        printf("Memory Allocation Failed\n");
+        exit(-1);
+    }
+    newNode->task = strdup(task);
+    newNode->next = undoStack.top;
+    undoStack.top = newNode;
+}
+
+char* PopDeletedTaskFromStack() {
+    if (undoStack.top == NULL) {
+        return NULL;
+    }
+    StackNode* temp = undoStack.top;
+    char* task = temp->task;
+
+    undoStack.top = undoStack.top->next;
+    free(temp);
+
+    return task;
+}
+
+void UndoLastDeleted(listPtr list) {
+    char* lastDeletedTask = PopDeletedTaskFromStack();
+    if (lastDeletedTask == NULL) {
+        printf("Geri alinacak görev yok!\n");
+        return;
+    }
+
+    AddTask(lastDeletedTask, list);
+    printf("'%s' gorevi basariyla geri alindi!\n", lastDeletedTask);
+    free(lastDeletedTask);
+}
+
+void SmartDeleteTask(const char* taskName, listPtr list) {
+    taskPtr gorev = FindTask((char*)taskName, list);
+    if (gorev != NULL) {
+        AddDeletedTaskToStack(gorev->task);
+        DeleteTask(gorev, list);
+        printf("'%s' gorevi basariyla silindi ve stack'e eklendi!\n", taskName);
+    } else {
+        printf("'%s' gorevi bulunamadi!\n", taskName);
+    }
+}
 
 
 
