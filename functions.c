@@ -458,6 +458,62 @@ void SmartDeleteTask(const char* taskName, listPtr list) {
     }
 }
 
+typedef struct queueNode {
+    char *task;
+    struct queueNode *next;
+} QueueNode;
+
+typedef struct queue {
+    QueueNode *front;
+    QueueNode *rear;
+} TaskQueue;
+
+TaskQueue taskQueue = {NULL, NULL};
+
+void EnqueueTask(const char* task) {
+    QueueNode* newNode = (QueueNode*)malloc(sizeof(QueueNode));
+    newNode->task = strdup(task);
+    newNode->next = NULL;
+
+    if (taskQueue.rear == NULL) {
+        taskQueue.front = taskQueue.rear = newNode;
+    } else {
+        taskQueue.rear->next = newNode;
+        taskQueue.rear = newNode;
+    }
+}
+
+void ProcessNextTask(listPtr list) {
+    if (taskQueue.front == NULL) {
+        printf("Islenecek gorev yok.\n");
+        return;
+    }
+
+    char* taskToProcess = taskQueue.front->task;
+    printf("Siradaki görev: %s\n", taskToProcess);
+
+    taskPtr gorev = FindTask(taskToProcess, list);
+    if (gorev != NULL) {
+        DeleteTask(gorev, list);
+        SaveListToFile(list);
+    }
+
+    QueueNode* temp = taskQueue.front;
+    taskQueue.front = taskQueue.front->next;
+    if (taskQueue.front == NULL) taskQueue.rear = NULL;
+    free(temp->task);
+    free(temp);
+}
+
+void AutoQueueList(listPtr list) {
+    taskPtr temp = list->head;
+    while (temp != NULL) {
+        EnqueueTask(temp->task);
+        temp = temp->next;
+    }
+    printf("Tum gorevler kuyruga alindi.\n");
+}
+
 
 
 
