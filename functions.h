@@ -59,7 +59,9 @@ void ClearAllLogs();//Programin tuttugu tum  loglarını temizler (savedlists,li
 
 listPtr ReadFromFileAndCreateList(int fileId);//Dosyadaki veriler ile bir liste olusturup döner.
 
+void SmartDeleteTask(const char* taskName, listPtr list);
 
+void UndoLastDeleted(listPtr list);
 
 
 
