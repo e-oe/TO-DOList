@@ -5,7 +5,9 @@
 typedef struct task { //Görevleri, dinamik olarak hafızadan yer alacak şekilde bir char dizisine kaydedecek düğüm yapısı.
     struct task* next;
     struct task* previous;
+    struct task* nextHash;
     char* task ;
+    int id; 
 }Task;
 typedef Task* taskPtr;
 
@@ -68,6 +70,11 @@ void EnqueueTask(const char* task);
 void ProcessNextTask(listPtr list);
 
 void AutoQueueList(listPtr list);
+
+void DeleteTaskByID(int id, listPtr list);
+
+taskPtr FindTaskByID(int id);
+
 
 
 
