@@ -4,6 +4,62 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <errno.h>
+#define HASH_TABLE_SIZE 101
+
+static taskPtr taskHashTable[HASH_TABLE_SIZE] = {NULL};
+
+unsigned int HashFunction(int id) {
+    return id % HASH_TABLE_SIZE;
+}
+
+void AddTaskToHashTable(taskPtr taskNode, int id) {
+    unsigned int index = HashFunction(id);
+    taskNode->nextHash = taskHashTable[index];
+    taskHashTable[index] = taskNode;
+    taskNode->id = id;
+}
+
+taskPtr FindTaskByID(int id) { 
+    unsigned int index = HashFunction(id);
+    taskPtr current = taskHashTable[index];
+
+    while (current != NULL) {
+        if (current->id == id) {
+            printf("ID: %d olan gorev bulundu: %s\n", id, current->task);
+            return current;
+        }
+        current = current->nextHash;
+    }
+
+    printf("ID: %d olan gorev bulunamadı.\n", id);
+    return NULL;
+}
+
+void DeleteTaskByID(int id, listPtr list) { 
+    unsigned int index = HashFunction(id);
+    taskPtr current = taskHashTable[index];
+    taskPtr previous = NULL;
+
+    while (current != NULL && current->id != id) {
+        previous = current;
+        current = current->nextHash;
+    }
+
+    if (current == NULL) {
+        printf("ID %d olan gorev bulunamadı.\n", id);
+        return;
+    }
+
+    if (previous == NULL) {
+        taskHashTable[index] = current->nextHash;
+    } else {
+        previous->nextHash = current->nextHash;
+    }
+
+    DeleteTask(current, list);
+    printf("ID %d olan gorev silindi.\n", id);
+}
+
 
 
 
@@ -35,6 +91,7 @@ void AddTask(char task[],listPtr list) {
         list->tail=node;
         list->listSize++;
     }
+    AddTaskToHashTable(node, list->listSize);
     SaveListToMainList(list);
 }// Görev düğümünü listenin sonuna ekleyen fonksiyon
 
