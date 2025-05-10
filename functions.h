@@ -75,6 +75,7 @@ void DeleteTaskByID(int id, listPtr list);
 
 taskPtr FindTaskByID(int id);
 
+void DisplayAVLInOrder(listPtr list);
 
 
 
