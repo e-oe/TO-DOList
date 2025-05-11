@@ -693,14 +693,41 @@ void FreeAVLTree(AVLNode* root) {
     }
 }
 
-void DisplayAVLInOrder(listPtr list) {
+/*void DisplayAVLInOrder(listPtr list) {
     AVLNode* root = NULL;
     AutoInsertToAVL(list, &root);
     printf("\n--- Gorevler Alfabetik Sirada ---\n");
     InOrderTraversal(root);
     FreeAVLTree(root);
 }
+*/
 
+void RecursivePrint(AVLNode* node, int* indexPtr) {
+    if (node == NULL) return;
+    RecursivePrint(node->left, indexPtr);
+    printf("| %2d) %-20s | %p |\n", (*indexPtr)++, node->task, (void*)node);
+    RecursivePrint(node->right, indexPtr);
+}
+
+void DisplayAVLInOrder(listPtr list) {
+    AVLNode* root = NULL;
+    AutoInsertToAVL(list, &root);
+
+    printf("\n--- Gorevler Alfabetik Sirada ---\n");
+    printf("=================================================\n");
+    printf("|   Tasks                           Address     |\n");
+    printf("=================================================\n");
+
+    int index = 1;
+    RecursivePrint(root, &index);
+
+    printf("=================================================\n");
+    printf("Pointer of List (head): %p\n", (void*)list);
+    printf("Total Task Count: %d\n", list->listSize);
+    printf("=================================================\n");
+
+    FreeAVLTree(root);
+}
 
 
 
