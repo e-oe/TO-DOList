@@ -34,7 +34,7 @@ Listedeki görevleri alfabetik olarak sıralayabilme.
 
 ### Projemizde hangi veri yapılarını kullandık?
 
-Proje konumuzun Yapılacaklar Listesi olması ve konumuzun doğası gereği listeler üzerinden çalışması doalyısı ile ağırlıklı olarak "Çift Yönlü Bağlı Liste" kullandık. 
+Proje konumuzun Yapılacaklar Listesi olması ve konumuzun doğası gereği listeler üzerinden çalışması dolayısı ile ağırlıklı olarak "Çift Yönlü Bağlı Liste" kullandık. 
 ## İşte projemizde "Çift Yönlü Bağlı Liste" yapısını kullandığımız fonksiyonlar ve bunların yerine getirdikleri işlemler:
 
 ### 1)Yapılacaklar Listesi oluşturma.
@@ -54,12 +54,14 @@ Algoritma Analizi Çıktısı: O(1)
 void ChangeTaskPriority(taskPtr taskToMove,listPtr listTheTaskIsFrom,taskPtr newNeighbouringTask,listPtr DestinationList,int beforeOrAfter)
 Algoritma Analizi Çıktısı: O(1)
 ```
+Bu  üç görev için liste yapısı kullanmak karmaşıklık bakımından herhangi bir ek yük oluşturmadığı ve proje yapımızla uyumlu olduğu için tercih ettik. Eğer bağlı liste yerine stack ya da quee gibi bir yapı kullansaydık görevleri istediğimiz konumlara kaydetmek fazladan işlem gerektirecekti.
 ### 4)Listede Görev Arama.
 ```
 taskPtr FindTaskByID(int id)
 taskPtr FindTask(char task[],listPtr list)
-Algoritma Analizi Çıktısı: O(1)
+Algoritma Analizi Çıktısı: O(n)
 ```
+Görevler kullanıcı tercihine göre sıralandığı için, kullanıcının arzu ettiği sırayı bozup bunları değerlerine göre sıralayarak binary search yapma ve dolayısı ile karmaşıklığı düşürme imkanımız yoktu bu yüzden O(n) karmaşıklığa razı olup listede sıralı arama koşturduk.(Kullanıcı talep etmesi halinde görevleri alfabetik sıraya göre sıralayabiliyor.)
 ### 5)Görevleri görüntülemek için listeleme.
 ```
 void DisplayList(listPtr list)
@@ -78,6 +80,7 @@ Algoritma Analizi Çıktısı: O(n)
 listPtr MergeLists(listPtr mergedList,listPtr listToMerge)
 Algoritma Analizi Çıktısı: O(1)
 ```
+
 ## Projemizde "Stack" yapısını kullandığımız fonksiyonlar ve bunların yerine getirdikleri işlemler:
 ### 1)Silinen görevlerin kaydını tutma.
 ```
@@ -90,6 +93,8 @@ Algoritma Analizi Çıktısı: O(1)
 void UndoLastDeleted(listPtr list)
 Algoritma Analizi Çıktısı: O(1)
 ```
+Bu işlemleri silinenleri tutacak bir liste ile de halledebilirdik ancak silmeyi geri alma işlemi adım adım yapıldığından ve bu yapılırken hep son elemana ulaşılması gerektiğinden daha verimli olacak stack yapısını tercih ettik.
+Karmaşıklık olarak herhangi bir şey farketmeyecek de olsa listenin getirdiği ek özelliklere burada ihtiyacımız yoktu
 ## Projemizde "AVL Ağacı" yapısını kullandığımız fonksiyonlar ve bunların yerine getirdikleri işlemler:
 ### Görevleri alfabetik olarak sıralama ve bunları listeleme.
 ```
@@ -97,6 +102,7 @@ void DisplayAVLInOrder(listPtr list)
 void InOrderTraversal(AVLNode* root) 
 Algoritma Analizi Çıktısı: O(n)
 ```
+AVL ağacının yapısı gereği, düzenlendikten sonra üzeirnde bir inorder traverse gerçekleştiğinde değerleri sıralı olarak verebilme özelliğinden faydalanmak istedik.
 Yapılacak işlemler için veri yapılarını seçerken karmaşıklığı en alt seviyede tutmayı amaçladık ve O(n) karmaşıklığını aşmamaya çalıştık.
 
 
