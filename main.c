@@ -1,17 +1,26 @@
 #include <stdio.h>
 #include "functions.h"
+#include "menu.h"
 
 
 
 int main(void) {
-    printf("write a task to add the list\n");
+    /*printf("write a task to add the list\n");
     char task1[]="tak1";
     char task2[]="tak2";
     char task3[]="tak3";
     char task4[]="tak4";
+    */
 
+    listPtr Listem = CreateList();
 
+       while (1) {
+        ShowMainMenu(Listem);
+    }
 
+    return 0;
+
+    /*
     listPtr Listem=CreateList();
     listPtr list=CreateList();
     ReadFromFileAndCreateList(50);
@@ -29,7 +38,7 @@ int main(void) {
     DisplayList(Listem);
     SaveTheChangesInMainList();
     FlushMainList();
-
+    */
 
 
     
@@ -43,5 +52,5 @@ int main(void) {
 
 
 
-    return 0;
+    
 }
