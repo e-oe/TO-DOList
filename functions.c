@@ -93,7 +93,7 @@ void AddTask(char task[],listPtr list) {
     }
     AddTaskToHashTable(node, list->listSize);
     SaveListToMainList(list);
-}// Görev düğümünü listenin sonuna ekleyen fonksiyon
+}// Görev düğümünü listenin sonuna ekleyen fonksiyon*
 
 void AddTaskWithoutMainList(char task[],listPtr list) {
     taskPtr node=(taskPtr)malloc(sizeof(Task));
@@ -202,7 +202,7 @@ listPtr CreateList() {
     SaveListToMainList(taskList);
 
     return taskList;
-}//Liste oluşturup dönen fonksiyon.
+}//Liste oluşturup dönen fonksiyon.*
 
 void DisplayList(listPtr list) {
     if (list->listSize==0) {
@@ -278,7 +278,7 @@ void DeleteTask(taskPtr node,listPtr list) {
         list->listSize--;
     }
     SaveListToMainList(list);
-}// Verilen listeden taski silen fonksiyon
+}// Verilen listeden taski silen fonksiyon*
 
 void ClearList(listPtr list) {
     taskPtr temp=list->head;
@@ -306,7 +306,7 @@ void DeleteList(listPtr list) {
         }
         ClearList(list);
         free(list);
-}// Listenin dosyasını, bilgilerini siler ve freeler.
+}// Listenin dosyasını, bilgilerini siler ve freeler.*
 
 void DeleteFile(int listnumber) {
     char fullPath[100];
@@ -456,6 +456,14 @@ listPtr ReadFromFileAndCreateList(int fileId) {
     return List;
 
 }//Dosyadan veri okuyup liste döner.
+
+listPtr MergeLists(listPtr mergedList,listPtr listToMerge) {
+    mergedList->tail->next=listToMerge->head;
+    listToMerge->head->previous=mergedList->tail;
+    mergedList->tail=listToMerge->tail;
+    DeleteList(listToMerge);
+    return mergedList;
+}//İki liste alarak ikinciyi birincinin arkasına ekler. İkincinin dosyasını siler ve freeler.
 
 typedef struct stackNode {
     char *task;
