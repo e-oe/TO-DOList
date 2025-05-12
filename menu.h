@@ -3,6 +3,6 @@
 
 #include "functions.h"
 
-void ShowMainMenu(listPtr list);
+void ShowMainMenu(listPtr* list);
 
 #endif
