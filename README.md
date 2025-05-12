@@ -1,6 +1,6 @@
 # TO-DOList
 
- **Merhaba! Veri Yapıları hakkında öğrendiğimiz yöntemleri, uygulayarak tecrübeleye dönüştürme amacıyla yapmış olduğumuz projemize hoş geldiniz.**
+ **Merhaba! Veri Yapıları hakkında öğrendiğimiz yöntemleri, uygulayarak tecrübeye dönüştürme amacıyla yapmış olduğumuz projemize hoş geldiniz.**
 Grup Üyeleri ve Görevleri: 
 
 [e-oe](https://github.com/e-oe): Proje yol haritasını ve genel program yapısını belirledi. Liste yapısını ve fonksiyonlarını oluşturdu. Dosya kayıt ve okuma fonksiyonlarını yazdı. ReadME dosyasını yazdı ve algoritma analizlerini gerçekleştirdi.
@@ -8,7 +8,7 @@ Grup Üyeleri ve Görevleri:
 [Rasheedie](https://github.com/Rasheedie): Stack, Quee ve AVL ağacı yapsını ekledi. Karşılama ekranı için main fonksiyonlarını yazdı.
 
 ## Projemizin konusu: Yapılacaklar listesi oluşturmak.
-### Uygulamamızı kullanan bır kullanıcı ne gibi işlemler yapabilir? 
+### Uygulamamızı kullanan bir kullanıcı ne gibi işlemler yapabilir? 
 
 Yapılacaklar listesi oluşturup bu listelerin pointer adreslerini gözlemleme.
 
