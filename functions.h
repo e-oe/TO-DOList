@@ -18,6 +18,18 @@ typedef struct list { //Oluşturulan düğümlerin başını,sonunu ve toplam d�
     int iD;
 }List;
 typedef List* listPtr;
+typedef struct listQueueNode {
+    listPtr list;
+    struct listQueueNode *nextNode;
+}ListQueueNode;
+typedef  ListQueueNode* ListQueueNodePtr;
+
+typedef struct queueOfLists {
+    ListQueueNodePtr front;
+    ListQueueNodePtr rear;
+} QueueOfLists;
+typedef  QueueOfLists* QueueOfListsPtr;
+
 
 
 /* MainList çalışma mantığı: Açılan bir sessionda üzerinde değişiklik yapılan ve yeni oluşturulan listelerin adreslerini yerel bir dosyaya kaydeder.
@@ -61,6 +73,14 @@ void ClearAllLogs();//Programin tuttugu tum  loglarını temizler (savedlists,li
 
 listPtr ReadFromFileAndCreateList(int fileId);//Dosyadaki veriler ile bir liste olusturup döner.
 
+QueueOfListsPtr CreateQueue();//Çalıştırma sonunda kaydedilecek listelerin kaydının tutulacağı queue yapısını oluşturur.
+
+ListQueueNodePtr SaveListToQueueNode(listPtr list);// Listeyi queue noduna kaydeder.
+
+void PushToQueue(QueueOfListsPtr queue,ListQueueNodePtr node) ;//Queue ye liste pointer bilgisini tutan nodu u pushlar.
+
+ListQueueNodePtr PopFromQueue(QueueOfListsPtr queue);//Queue den liste pointer bilgisini alıp return eder.
+
 listPtr MergeLists(listPtr mergedList,listPtr listToMerge);//İki liste alarak ikinciyi birincinin arkasına ekler. İkincinin dosyasını siler ve freeler.
 
 void SmartDeleteTask(const char* taskName, listPtr list);
@@ -78,6 +98,7 @@ void DeleteTaskByID(int id, listPtr list);
 taskPtr FindTaskByID(int id);
 
 void DisplayAVLInOrder(listPtr list);
+void ShowMainMenu(listPtr list);
 
 
 

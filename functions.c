@@ -461,9 +461,54 @@ listPtr MergeLists(listPtr mergedList,listPtr listToMerge) {
     mergedList->tail->next=listToMerge->head;
     listToMerge->head->previous=mergedList->tail;
     mergedList->tail=listToMerge->tail;
-    DeleteList(listToMerge);
+    mergedList->listSize=mergedList->listSize+listToMerge->listSize;
+    free(listToMerge);
     return mergedList;
 }//İki liste alarak ikinciyi birincinin arkasına ekler. İkincinin dosyasını siler ve freeler.
+
+QueueOfListsPtr CreateQueue() {
+    QueueOfListsPtr queue= (QueueOfListsPtr)malloc(sizeof(QueueOfLists));
+    queue->front=NULL;
+    queue->rear=NULL;
+    return queue;
+}//Çalıştırma sonunda kaydedilecek listelerin kaydının tutulacağı queue yapısını oluşturur.
+
+ListQueueNodePtr SaveListToQueueNode(listPtr list) {
+    ListQueueNodePtr queueNode= (ListQueueNodePtr)malloc(sizeof(ListQueueNode));
+    queueNode->list=list;
+    queueNode->nextNode=NULL;
+    return  queueNode;
+
+}// Listeyi queue noduna kaydeder.
+
+void PushToQueue(QueueOfListsPtr queue,ListQueueNodePtr node) {
+    if (queue->front==NULL) {
+        queue->front=node;
+        queue->rear=node;
+    }
+    else {
+        queue->rear->nextNode=node;
+        queue->rear=node;
+    }
+}//Queue ye liste pointer bilgisini tutan nodu u pushlar.
+
+ListQueueNodePtr PopFromQueue(QueueOfListsPtr queue) {
+    ListQueueNodePtr temp=queue->front;
+    if (queue->front==NULL) {
+        printf("Queue is empty");
+        return 0;
+    }
+     if (queue->rear==queue->front) {
+        queue->front=NULL;
+        queue->rear=NULL;
+        return temp;
+    }
+
+        queue->front=NULL;
+        queue->front=temp->nextNode;
+        return temp;
+
+}//Queue den liste pointer bilgisini alıp return eder.
 
 typedef struct stackNode {
     char *task;
@@ -731,11 +776,7 @@ void DisplayAVLInOrder(listPtr list) {
 
 
 
-/*The functions that i could add in feature
-void FindAndRevertChanges(listPtr list) {
-char address[100]=list;
-}//Verilen listenin mainlistteki logunu silerek son sessionda yapilmis degisikliklerin kaydedilmemesini saglar.
-*/
+
 
 
 
