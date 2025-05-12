@@ -81,6 +81,8 @@ void PushToQueue(QueueOfListsPtr queue,ListQueueNodePtr node) ;//Queue ye liste 
 
 ListQueueNodePtr PopFromQueue(QueueOfListsPtr queue);//Queue den liste pointer bilgisini alıp return eder.
 
+void SaveListsInQueue(QueueOfListsPtr queue);//Queue ye kaydedilmis listeleri harici diske kaydeder.
+
 listPtr MergeLists(listPtr mergedList,listPtr listToMerge);//İki liste alarak ikinciyi birincinin arkasına ekler. İkincinin dosyasını siler ve freeler.
 
 void SmartDeleteTask(const char* taskName, listPtr list);

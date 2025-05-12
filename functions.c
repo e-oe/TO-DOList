@@ -510,6 +510,14 @@ ListQueueNodePtr PopFromQueue(QueueOfListsPtr queue) {
 
 }//Queue den liste pointer bilgisini alıp return eder.
 
+void SaveListsInQueue(QueueOfListsPtr queue) {
+    ListQueueNodePtr qNode=PopFromQueue(queue);
+    while (qNode!=NULL) {
+        SaveListToFile(qNode->list);
+        qNode=qNode->nextNode;
+    }
+}//Queue ye kaydedilmis listeleri harici diske kaydeder.
+
 typedef struct stackNode {
     char *task;
     struct stackNode *next;
