@@ -1,6 +1,7 @@
 # TO-DOList
 
  **Merhaba! Veri Yapıları hakkında öğrendiğimiz yöntemleri, uygulayarak tecrübeye dönüştürme amacıyla yapmış olduğumuz projemize hoş geldiniz.**
+
 Grup Üyeleri ve Görevleri: 
 
 [e-oe](https://github.com/e-oe): Proje yol haritasını ve genel program yapısını belirledi. Liste yapısını ve fonksiyonlarını oluşturdu. Dosya kayıt ve okuma fonksiyonlarını yazdı. ReadME dosyasını yazdı ve algoritma analizlerini gerçekleştirdi.
@@ -34,7 +35,7 @@ Listedeki görevleri alfabetik olarak sıralayabilme.
 
 ### Projemizde hangi veri yapılarını kullandık?
 
-Proje konumuzun Yapılacaklar Listesi olması ve konumuzun doğası gereği listeler üzerinden çalışması dolayısı ile ağırlıklı olarak "Çift Yönlü Bağlı Liste" kullandık. 
+Proje konumuzun Yapılacaklar Listesi olması ve konumuzun doğası gereği listeler üzerinden çalışması dolayısı ile ağırlıklı olarak "Bağlı Liste" kullandık. Bu şekilde bağlı listenin dinamik olarak hafıza kullanabilme özelliğinden faydalandık.
 ## İşte projemizde "Çift Yönlü Bağlı Liste" yapısını kullandığımız fonksiyonlar ve bunların yerine getirdikleri işlemler:
 
 ### 1)Yapılacaklar Listesi oluşturma.
